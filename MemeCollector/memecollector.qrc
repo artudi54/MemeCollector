@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/MemeCollector">
+        <file>ProgramIcon.ico</file>
+    </qresource>
+</RCC>

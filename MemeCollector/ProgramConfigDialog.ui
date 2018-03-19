@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ProgramConfigDialog</class>
+ <widget class="QDialog" name="ProgramConfigDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>540</width>
+    <height>230</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>540</width>
+    <height>230</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>540</width>
+    <height>230</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MemeCollector</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="gridLayout_3">
+     <item row="0" column="0">
+      <widget class="QGroupBox" name="groupBox">
+       <property name="title">
+        <string>Config</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="0">
+         <widget class="QLabel" name="clipboardSaveLabel">
+          <property name="text">
+           <string>Clibpoard save format</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QComboBox" name="clipboardSave">
+          <item>
+           <property name="text">
+            <string>BMP - bitmap</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>JPEG - lossy image</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>PNG - portable network graphics</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="shortcutMode">
+          <item>
+           <property name="text">
+            <string>No shortcuts</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Show window shortcut</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Show window and quicksave shortcuts</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QCheckBox" name="startHidden">
+          <property name="text">
+           <string>Start hidden</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="shortcutModeLabel">
+          <property name="text">
+           <string>Shortcut mode</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QComboBox" name="autostartMode">
+          <item>
+           <property name="text">
+            <string>Off</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>On</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>On - Hidden</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QCheckBox" name="askBefore">
+          <property name="text">
+           <string>Ask before overwriting</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="autostartModeLabel">
+          <property name="text">
+           <string>Autostart mode</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QCheckBox" name="showMsgOnComplete">
+          <property name="text">
+           <string>Show message on complete</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="shortcutsDescription">
+       <property name="text">
+        <string>Shortcuts:
+Ctrl+Shift+1 - Show window on top
+Ctlr+Shift+2 - Quicksave from copied URL
+Ctrl+Shift+3 - Quicksave from copied image</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="buttonOK">
+       <property name="text">
+        <string>OK</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonCancel">
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonDefaults">
+       <property name="text">
+        <string>Defaults</string>
+       </property>
+       <property name="autoDefault">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
