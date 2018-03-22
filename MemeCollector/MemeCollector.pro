@@ -4,9 +4,9 @@
 
 TEMPLATE = app
 TARGET = MemeCollector
-DESTDIR = ../x64/Debug
-QT += core xml network gui widgets printsupport 
-CONFIG += debug console
+DESTDIR = ../x64/Release
+QT += core xml network gui widgets printsupport
+CONFIG += release
 DEFINES += QT_NETWORK_LIB QT_WIDGETS_LIB QT_XML_LIB QT_PRINTSUPPORT_LIB
 INCLUDEPATH += ./QHotkey \
     ./GeneratedFiles \
@@ -14,7 +14,7 @@ INCLUDEPATH += ./QHotkey \
     ./GeneratedFiles/$(ConfigurationName)
 DEPENDPATH += .
 MOC_DIR += ./GeneratedFiles/$(ConfigurationName)
-OBJECTS_DIR += debug
+OBJECTS_DIR += release
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
 include(MemeCollector.pri)

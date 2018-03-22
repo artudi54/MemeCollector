@@ -7,16 +7,13 @@
 message("You are running qmake on a generated .pro file. This may not work!")
 
 
-HEADERS += ./view/ImageItemDelegate.hpp \
-    ./CachedImage.hpp \
+HEADERS += ./cache/ImageCacheMap.hpp \
+    ./view/ImageItemDelegate.hpp \
     ./autostart.hpp \
-    ./CacheMapManager.hpp \
     ./DeselectableTableWidget.hpp \
-    ./ImageCacheMap.hpp \
     ./stdafx.h \
     ./ImageMIME.hpp \
     ./resource.h \
-    ./usermessage.hpp \
     ./ImageViewer.hpp \
     ./Filenotifier.hpp \
     ./MemeCollectorApplication.hpp \
@@ -27,15 +24,16 @@ HEADERS += ./view/ImageItemDelegate.hpp \
     ./view/ImageLoader.hpp \
     ./QHotkey/qhotkey.h \
     ./QHotkey/qhotkey_p.h \
+    ./cache/CacheMapManager.hpp \
+    ./cache/CachedImage.hpp \
     ./view/ImageItemWidget.hpp \
     ./MemeCollector.hpp \
     ./view/ImageTableView.hpp \
     ./view/ImageItemModel.hpp
-SOURCES += ./CachedImage.cpp \
-    ./CacheMapManager.cpp \
+SOURCES += ./cache/CacheMapManager.cpp \
+    ./cache/CachedImage.cpp \
     ./DeselectableTableWidget.cpp \
     ./Filenotifier.cpp \
-    ./ImageCacheMap.cpp \
     ./ImageMIME.cpp \
     ./ImageViewer.cpp \
     ./ItemDialog.cpp \
@@ -45,21 +43,20 @@ SOURCES += ./CachedImage.cpp \
     ./QuickClipboardWindow.cpp \
     ./QuickUrlWindow.cpp \
     ./stdafx.cpp \
-    ./usermessage.cpp \
     ./autostart.cpp \
     ./view/ImageItemModel.cpp \
     ./view/ImageItemDelegate.cpp \
     ./QHotkey/qhotkey.cpp \
     ./QHotkey/qhotkey_win.cpp \
+    ./cache/ImageCacheMap.cpp \
     ./view/ImageTableView.cpp \
     ./view/ImageLoader.cpp \
     ./view/ImageItemWidget.cpp \
     ./MemeCollector.cpp
-FORMS += ./memecollector.ui \
-    ./thumbnailview.ui \
-    ./ImageViewer.ui \
+FORMS += ./ImageViewer.ui \
     ./QuickUrlWindow.ui \
     ./QuickClipboardWindow.ui \
     ./ProgramConfigDialog.ui \
-    ./ItemDialog.ui
+    ./ItemDialog.ui \
+    ./MemeCollector.ui
 RESOURCES += memecollector.qrc
