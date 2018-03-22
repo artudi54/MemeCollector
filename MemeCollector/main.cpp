@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "memecollector.h"
+#include "MemeCollector.hpp"
 #include "MemeCollectorApplication.hpp"
 
 int main(int argc, char *argv[]) {

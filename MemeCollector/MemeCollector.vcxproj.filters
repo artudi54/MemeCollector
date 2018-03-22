@@ -45,70 +45,25 @@
     <Filter Include="Source Files\QHotkey">
       <UniqueIdentifier>{8918749a-03b9-4b91-8417-738096865ba9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\cache">
+      <UniqueIdentifier>{1e19d862-871a-4a8f-a662-b5f9d7e842b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\cache">
+      <UniqueIdentifier>{5807ce53-4cb6-4b73-9cbb-95237c5daeb9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="memecollector.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\qrc_memecollector.cpp">
       <Filter>Generated Files</Filter>
-    </ClCompile>
-    <ClCompile Include="usermessage.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ImageMIME.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="view\ImagesTableView.cpp">
-      <Filter>Source Files\view</Filter>
-    </ClCompile>
-    <ClCompile Include="view\ImagesLoader.cpp">
-      <Filter>Source Files\view</Filter>
-    </ClCompile>
-    <ClCompile Include="view\ImagesItemWidget.cpp">
-      <Filter>Source Files\view</Filter>
-    </ClCompile>
-    <ClCompile Include="view\ImagesItemModel.cpp">
-      <Filter>Source Files\view</Filter>
-    </ClCompile>
-    <ClCompile Include="view\ImagesItemDelegate.cpp">
-      <Filter>Source Files\view</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ImagesTableView.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ImagesTableView.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ImagesItemWidget.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ImagesItemWidget.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ImagesItemDelegate.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ImagesItemDelegate.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ImagesItemModel.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ImagesItemModel.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_ImagesLoader.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_ImagesLoader.cpp">
-      <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="ImageViewer.cpp">
       <Filter>Source Files</Filter>
@@ -164,12 +119,6 @@
     <ClCompile Include="GeneratedFiles\Release\moc_ItemDialog.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="CachedImage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ImageCacheMap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Filenotifier.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -200,37 +149,76 @@
     <ClCompile Include="GeneratedFiles\Release\moc_qhotkey_p.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_memecollector.cpp">
+    <ClCompile Include="autostart.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MemeCollector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MemeCollector.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_memecollector.cpp">
+    <ClCompile Include="GeneratedFiles\Release\moc_MemeCollector.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ImageItemDelegate.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ImageItemDelegate.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ImageItemModel.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ImageItemModel.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ImageItemWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ImageItemWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ImageLoader.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ImageLoader.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ImageTableView.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ImageTableView.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="view\ImageItemDelegate.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="view\ImageItemModel.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="view\ImageItemWidget.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="view\ImageLoader.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="view\ImageTableView.cpp">
+      <Filter>Source Files\view</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\CachedImage.cpp">
+      <Filter>Source Files\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\CacheMapManager.cpp">
+      <Filter>Source Files\cache</Filter>
+    </ClCompile>
+    <ClCompile Include="cache\ImageCacheMap.cpp">
+      <Filter>Source Files\cache</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="memecollector.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="memecollector.qrc">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="thumbnailview.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="view\ImagesTableView.hpp">
-      <Filter>Header Files\view</Filter>
-    </CustomBuild>
-    <CustomBuild Include="view\ImagesItemWidget.hpp">
-      <Filter>Header Files\view</Filter>
-    </CustomBuild>
-    <CustomBuild Include="view\ImagesItemDelegate.hpp">
-      <Filter>Header Files\view</Filter>
-    </CustomBuild>
-    <CustomBuild Include="view\ImagesItemModel.hpp">
-      <Filter>Header Files\view</Filter>
-    </CustomBuild>
-    <CustomBuild Include="view\ImagesLoader.hpp">
-      <Filter>Header Files\view</Filter>
     </CustomBuild>
     <CustomBuild Include="ImageViewer.hpp">
       <Filter>Header Files</Filter>
@@ -274,25 +262,34 @@
     <CustomBuild Include="QHotkey\qhotkey_p.h">
       <Filter>Header Files\QHotkey</Filter>
     </CustomBuild>
-    <CustomBuild Include="memecollector.h">
+    <CustomBuild Include="MemeCollector.hpp">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="view\ImageItemDelegate.hpp">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="view\ImageItemModel.hpp">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="view\ImageItemWidget.hpp">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="view\ImageLoader.hpp">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="view\ImageTableView.hpp">
+      <Filter>Header Files\view</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MemeCollector.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_memecollector.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="usermessage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ImageMIME.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_thumbnailview.h">
-      <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_imageviewer.h">
       <Filter>Generated Files</Filter>
@@ -321,14 +318,23 @@
     <ClInclude Include="GeneratedFiles\ui_ItemDialog.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="CachedImage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ImageCacheMap.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="DeselectableTableWidget.hpp">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="autostart.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_MemeCollector.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\CachedImage.hpp">
+      <Filter>Header Files\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\CacheMapManager.hpp">
+      <Filter>Header Files\cache</Filter>
+    </ClInclude>
+    <ClInclude Include="cache\ImageCacheMap.hpp">
+      <Filter>Header Files\cache</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -340,8 +346,5 @@
     <Image Include="ProgramIcon.ico">
       <Filter>Resource Files</Filter>
     </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram.cd" />
   </ItemGroup>
 </Project>

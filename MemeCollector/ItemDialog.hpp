@@ -9,6 +9,9 @@ public:
 	ItemDialog(QWidget *parent, QTableWidget *widget);
 	ItemDialog(QWidget *parent, QTableWidget *widget, QTableWidgetItem *name, QTableWidgetItem *path);
 	virtual ~ItemDialog();
+signals:
+	void path_changed(QString prevName, QString newName, QString newPath);
+	void name_changed(QString prevname, QString newName);
 private slots:
 	void accept_input();
 	void open_directory();

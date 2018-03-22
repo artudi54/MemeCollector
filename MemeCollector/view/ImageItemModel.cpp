@@ -1,27 +1,27 @@
 #include "stdafx.h"
-#include "ImagesItemModel.hpp"
+#include "ImageItemModel.hpp"
 
 
 
-ImagesItemModel::ImagesItemModel(QObject *parent)
+ImageItemModel::ImageItemModel(QObject *parent)
 	: QAbstractTableModel(parent)
 	, imagesList()
 	, columnNumber(0)
 	, width(0)
 	, padding(0) {}
 
-ImagesItemModel::~ImagesItemModel() {}
+ImageItemModel::~ImageItemModel() {}
 
 
 
-void ImagesItemModel::clear() {
+void ImageItemModel::clear() {
 	this->beginResetModel();
 	imagesList.clear();
 	this->endResetModel();
 }
 
-void ImagesItemModel::add_entry(QFileInfo info, QImage image) {
-	imagesList.push_back(std::make_shared<ImagesItemWidget>(info, QPixmap::fromImage(image)));
+void ImageItemModel::add_entry(QFileInfo info, QImage image) {
+	imagesList.push_back(std::make_shared<ImageItemWidget>(info, QPixmap::fromImage(image)));
 	if (width == 0)
 		return;	
 
@@ -44,7 +44,7 @@ void ImagesItemModel::add_entry(QFileInfo info, QImage image) {
 	}
 }
 
-void ImagesItemModel::remove_indices(const std::vector<std::size_t> &indices) {
+void ImageItemModel::remove_indices(const std::vector<std::size_t> &indices) {
 	this->beginResetModel();
 	auto condition = [&indices, rangeidx = 0, idx = 0](auto&&) mutable {
 		if (idx < indices.size() && rangeidx == indices[idx]) {
@@ -70,21 +70,21 @@ void ImagesItemModel::remove_indices(const std::vector<std::size_t> &indices) {
 
 
 
-void ImagesItemModel::rotate_right(const QModelIndex & index) {
+void ImageItemModel::rotate_right(const QModelIndex & index) {
 	QTransform transformation;
 	this->rotate(90, index);
 }
 
-void ImagesItemModel::rotate_left(const QModelIndex & index) {
+void ImageItemModel::rotate_left(const QModelIndex & index) {
 	QTransform transformation;
 	this->rotate(-90, index);
 }
 
-void ImagesItemModel::flip_vertically(const QModelIndex & index) {
+void ImageItemModel::flip_vertically(const QModelIndex & index) {
 	this->flip(true, false, index);
 }
 
-void ImagesItemModel::flip_horizontally(const QModelIndex & index) {
+void ImageItemModel::flip_horizontally(const QModelIndex & index) {
 	this->flip(false, true, index);
 }
 
@@ -93,8 +93,8 @@ void ImagesItemModel::flip_horizontally(const QModelIndex & index) {
 
 
 
-QModelIndex ImagesItemModel::closest_match(const QString & search) const {
-	auto match = [](const SharedImagesItemWidget &infoWidget, const QString &search) {
+QModelIndex ImageItemModel::closest_match(const QString & search) const {
+	auto match = [](const SharedImageItemWidget &infoWidget, const QString &search) {
 		return infoWidget->get_title().compare(search, Qt::CaseInsensitive) < 0;
 	};
 	auto it = std::lower_bound(imagesList.begin(), imagesList.end(), search, match);
@@ -111,19 +111,19 @@ QModelIndex ImagesItemModel::closest_match(const QString & search) const {
 
 
 
-Qt::ItemFlags ImagesItemModel::flags(const QModelIndex & index) const {
-	if (ImagesItemModel::index_widget(index) == nullptr)
+Qt::ItemFlags ImageItemModel::flags(const QModelIndex & index) const {
+	if (ImageItemModel::index_widget(index) == nullptr)
 		return Qt::NoItemFlags;
 	return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
-int ImagesItemModel::rowCount(const QModelIndex & parent) const {
+int ImageItemModel::rowCount(const QModelIndex & parent) const {
 	if (parent.isValid() || columnNumber == 0)
 		return 0;
 	return static_cast<int>(imagesList.size() / columnNumber + (imagesList.size() % columnNumber > 0));
 }
 
-int ImagesItemModel::columnCount(const QModelIndex & parent) const {
+int ImageItemModel::columnCount(const QModelIndex & parent) const {
 	if (parent.isValid())
 		return 0;
 	return columnNumber;
@@ -132,7 +132,7 @@ int ImagesItemModel::columnCount(const QModelIndex & parent) const {
 
 
 
-QVariant ImagesItemModel::data(const QModelIndex & index, int role) const {
+QVariant ImageItemModel::data(const QModelIndex & index, int role) const {
 	if (index.isValid() && index.row() * columnNumber + index.column() < imagesList.size()) {
 		switch (role) {
 		case Qt::DisplayRole:
@@ -154,7 +154,7 @@ QVariant ImagesItemModel::data(const QModelIndex & index, int role) const {
 	return QVariant();
 }
 
-bool ImagesItemModel::setData(const QModelIndex & index, const QVariant & value, int role) {
+bool ImageItemModel::setData(const QModelIndex & index, const QVariant & value, int role) {
 	if (role == Qt::EditRole && value.canConvert<QFileInfo>()) {
 		std::size_t idx = index.row() * columnNumber + index.column();
 		QFileInfo newInfo = value.value<QFileInfo>();
@@ -175,7 +175,7 @@ bool ImagesItemModel::setData(const QModelIndex & index, const QVariant & value,
 
 
 
-QVariant ImagesItemModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant ImageItemModel::headerData(int section, Qt::Orientation orientation, int role) const {
 	return QVariant();
 }
 
@@ -183,8 +183,8 @@ QVariant ImagesItemModel::headerData(int section, Qt::Orientation orientation, i
 
 
 //static
-SharedImagesItemWidget ImagesItemModel::index_widget(const QModelIndex & index) {
-	return index.data(Qt::DisplayRole).value<SharedImagesItemWidget>();
+SharedImageItemWidget ImageItemModel::index_widget(const QModelIndex & index) {
+	return index.data(Qt::DisplayRole).value<SharedImageItemWidget>();
 }
 
 
@@ -193,7 +193,7 @@ SharedImagesItemWidget ImagesItemModel::index_widget(const QModelIndex & index) 
 
 
 
-void ImagesItemModel::set_size(QSize size, unsigned padding) {
+void ImageItemModel::set_size(QSize size, unsigned padding) {
 	width = size.width();
 	this->padding = padding;
 	int newColumnNumber;
@@ -215,13 +215,13 @@ void ImagesItemModel::set_size(QSize size, unsigned padding) {
 
 
 
-bool ImagesItemModel::case_insensitive_compare(const QString & lhs, const QString & rhs) {
+bool ImageItemModel::case_insensitive_compare(const QString & lhs, const QString & rhs) {
 	return lhs.compare(rhs, Qt::CaseInsensitive) < 0;
 }
 
-void ImagesItemModel::move_down(std::size_t index) { //repair if possible
+void ImageItemModel::move_down(std::size_t index) { //repair if possible
 	this->beginResetModel();
-	SharedImagesItemWidget widget = std::move(imagesList[index]);
+	SharedImageItemWidget widget = std::move(imagesList[index]);
 	QString title = widget->get_title();
 	while (index-- && case_insensitive_compare(title, imagesList[index]->get_title()))
 		imagesList[index + 1] = std::move(imagesList[index]);
@@ -229,9 +229,9 @@ void ImagesItemModel::move_down(std::size_t index) { //repair if possible
 	this->endResetModel();
 }
 
-void ImagesItemModel::move_up(std::size_t index) {
+void ImageItemModel::move_up(std::size_t index) {
 	this->beginResetModel();
-	SharedImagesItemWidget widget = std::move(imagesList[index]);
+	SharedImageItemWidget widget = std::move(imagesList[index]);
 	QString title = widget->get_title();
 	while (index++ < imagesList.size() - 1 && case_insensitive_compare(title, imagesList[index]->get_title()))
 		imagesList[index - 1] = std::move(imagesList[index]);
@@ -244,8 +244,8 @@ void ImagesItemModel::move_up(std::size_t index) {
 
 
 
-void ImagesItemModel::rotate(double deegrees, const QModelIndex & index) {
-	SharedImagesItemWidget widget = ImagesItemModel::index_widget(index);
+void ImageItemModel::rotate(double deegrees, const QModelIndex & index) {
+	SharedImageItemWidget widget = ImageItemModel::index_widget(index);
 	if (widget != nullptr) {
 		QString path = widget->get_info().absoluteFilePath();
 		QImage image(path);
@@ -260,8 +260,8 @@ void ImagesItemModel::rotate(double deegrees, const QModelIndex & index) {
 	}
 }
 
-void ImagesItemModel::flip(bool horizontally, bool vertically, const QModelIndex &index) {
-	SharedImagesItemWidget widget = ImagesItemModel::index_widget(index);
+void ImageItemModel::flip(bool horizontally, bool vertically, const QModelIndex &index) {
+	SharedImageItemWidget widget = ImageItemModel::index_widget(index);
 	if (widget != nullptr) {
 		QString path = widget->get_info().absoluteFilePath();
 		QImage image = QImage(path).mirrored(horizontally, vertically);

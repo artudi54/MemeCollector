@@ -1,28 +1,28 @@
 #include "stdafx.h"
-#include "ImagesItemDelegate.hpp"
+#include "ImageItemDelegate.hpp"
 
-ImagesItemDelegate::ImagesItemDelegate(QObject *parent)
+ImageItemDelegate::ImageItemDelegate(QObject *parent)
 	: QStyledItemDelegate(parent)
 	, padding(0) {}
 
-ImagesItemDelegate::~ImagesItemDelegate() {}
+ImageItemDelegate::~ImageItemDelegate() {}
 
 
 
-void ImagesItemDelegate::set_padding(unsigned padding) {
+void ImageItemDelegate::set_padding(unsigned padding) {
 	this->padding = padding;
 }
 
-unsigned ImagesItemDelegate::get_padding() const {
+unsigned ImageItemDelegate::get_padding() const {
 	return padding;
 }
 
 
 
 
-void ImagesItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option,
+void ImageItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & option,
 							   const QModelIndex & index) const {
-	SharedImagesItemWidget infoWidget = ImagesItemModel::index_widget(index);
+	SharedImageItemWidget infoWidget = ImageItemModel::index_widget(index);
 	if (infoWidget != nullptr) {
 		QRect rect = option.rect;
 		rect.translate(padding, padding);
@@ -53,7 +53,7 @@ void ImagesItemDelegate::paint(QPainter * painter, const QStyleOptionViewItem & 
 
 
 
-QSize ImagesItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
+QSize ImageItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QModelIndex & index) const {
 	QSize size = QStyledItemDelegate::sizeHint(option, index);
 	size.setHeight(size.height() +  2 * padding);
 	size.setWidth(size.width() + 2 * padding);
@@ -62,9 +62,9 @@ QSize ImagesItemDelegate::sizeHint(const QStyleOptionViewItem & option, const QM
 
 
 
-QWidget * ImagesItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const {
-	if (ImagesItemModel::index_widget(index) != nullptr) {
-		ImagesItemWidget *widget = new ImagesItemWidget(parent);
+QWidget * ImageItemDelegate::createEditor(QWidget * parent, const QStyleOptionViewItem & option, const QModelIndex & index) const {
+	if (ImageItemModel::index_widget(index) != nullptr) {
+		ImageItemWidget *widget = new ImageItemWidget(parent);
 		QMargins margins = widget->contentsMargins();
 		margins.setLeft(margins.left() + padding);
 		margins.setRight(margins.right() + padding);
@@ -72,17 +72,18 @@ QWidget * ImagesItemDelegate::createEditor(QWidget * parent, const QStyleOptionV
 		margins.setBottom(margins.bottom() + padding);
 		widget->setContentsMargins(margins);
 		widget->setFocusPolicy(Qt::StrongFocus);
-		QObject::connect(widget, &ImagesItemWidget::editing_finished, this, &ImagesItemDelegate::commit_and_close);
+		QObject::connect(widget, &ImageItemWidget::editing_finished, this, &ImageItemDelegate::commit_and_close);
+		emit editor_created(widget);
 		return widget;
 	}
 	return QStyledItemDelegate::createEditor(parent, option, index);
 
 }
 
-void ImagesItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const {
-	SharedImagesItemWidget infoWidget = ImagesItemModel::index_widget(index);
+void ImageItemDelegate::setEditorData(QWidget * editor, const QModelIndex & index) const {
+	SharedImageItemWidget infoWidget = ImageItemModel::index_widget(index);
 	if (infoWidget != nullptr) {
-		ImagesItemWidget *widget = dynamic_cast<ImagesItemWidget*>(editor);
+		ImageItemWidget *widget = dynamic_cast<ImageItemWidget*>(editor);
 		widget->set_info(infoWidget->get_info());
 		widget->set_pixmap(*infoWidget->get_pixmap());
 		widget->start_editing();
@@ -92,8 +93,8 @@ void ImagesItemDelegate::setEditorData(QWidget * editor, const QModelIndex & ind
 
 
 
-void ImagesItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const {
-	ImagesItemWidget *widget = dynamic_cast<ImagesItemWidget*>(editor);
+void ImageItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * model, const QModelIndex & index) const {
+	ImageItemWidget *widget = dynamic_cast<ImageItemWidget*>(editor);
 	if (widget->verify_and_update()) {
 		model->setData(index, QVariant::fromValue(widget->get_info()), Qt::EditRole);
 		emit index_edited(index);
@@ -105,7 +106,7 @@ void ImagesItemDelegate::setModelData(QWidget * editor, QAbstractItemModel * mod
 
 
 
-void ImagesItemDelegate::commit_and_close() {
+void ImageItemDelegate::commit_and_close() {
 	QWidget *widget = dynamic_cast<QWidget*>(this->sender());
 	emit commitData(widget);
 	emit closeEditor(widget);

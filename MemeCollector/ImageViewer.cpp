@@ -2,7 +2,8 @@
 #include "ImageViewer.hpp"
 
 ImageViewer::ImageViewer(QWidget *parent)
-	: QWidget(parent, Qt::Tool) {
+	: QWidget(parent, Qt::Tool)
+	, cacheMapManager(nullptr) {
 	this->setupUi(this);
 	if (parent != nullptr) {
 		parent->installEventFilter(this);
@@ -12,9 +13,13 @@ ImageViewer::ImageViewer(QWidget *parent)
 
 ImageViewer::~ImageViewer(){}
 
+void ImageViewer::set_cache_map_manager(CacheMapManager & cacheMapManager) {
+	this->cacheMapManager = &cacheMapManager;
+}
 
-void ImageViewer::set_directory(const QString & path) {
-	imageView->set_directory(QDir(path));
+
+void ImageViewer::set_directory(const QString &name, const QString &path) {
+	imageView->set_directory(cacheMapManager->get(name), QDir(path));
 }
 
 

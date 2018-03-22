@@ -1,13 +1,13 @@
 #pragma once
 
-#include "ImageCacheMap.hpp"
+#include "cache/ImageCacheMap.hpp"
 
-class ImagesLoader : public QObject {
+class ImageLoader : public QObject {
 	Q_OBJECT
 public:
-	explicit ImagesLoader(QObject *parent = nullptr);
-	ImagesLoader(ImageCacheMap *map, QDir directory, QObject *parent = nullptr);
-	virtual ~ImagesLoader();
+	explicit ImageLoader(QObject *parent = nullptr);
+	ImageLoader(const SharedImageCacheMap &map, QDir directory, QObject *parent = nullptr);
+	virtual ~ImageLoader();
 
 	void set_directory(QDir directory);
 	const QDir& get_directory() const;
@@ -18,7 +18,7 @@ signals:
 	void finished();
 	void next_info(QFileInfo info, QImage image);
 private:
-	ImageCacheMap *map;
+	SharedImageCacheMap map;
 	std::atomic_bool stopFlag;
 	QDir directory;
 };

@@ -1,14 +1,14 @@
 #pragma once
 
-#include "ImagesItemWidget.hpp"
+#include "ImageItemWidget.hpp"
 
-class ImagesItemModel : public QAbstractTableModel {
+class ImageItemModel : public QAbstractTableModel {
 	Q_OBJECT
 public:
 	static constexpr Qt::ItemDataRole RemoveRole = Qt::UserRole;
 
-	explicit ImagesItemModel(QObject *parent = nullptr);
-	virtual ~ImagesItemModel();
+	explicit ImageItemModel(QObject *parent = nullptr);
+	virtual ~ImageItemModel();
 
 	void clear();
 	void add_entry(QFileInfo info, QImage image);
@@ -26,7 +26,7 @@ public:
 	virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole) override;
 	virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 	
-	static SharedImagesItemWidget index_widget(const QModelIndex &index);
+	static SharedImageItemWidget index_widget(const QModelIndex &index);
 public slots:
 	void set_size(QSize size, unsigned padding);
 private:
@@ -35,7 +35,7 @@ private:
 	void move_up(std::size_t index);
 	void rotate(double deegrees, const QModelIndex &index);
 	void flip(bool horizontally, bool vertically, const QModelIndex &index);
-	std::vector<SharedImagesItemWidget> imagesList;
+	std::vector<SharedImageItemWidget> imagesList;
 	unsigned columnNumber;
 	unsigned width;
 	unsigned padding;

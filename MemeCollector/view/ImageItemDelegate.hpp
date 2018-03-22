@@ -1,15 +1,16 @@
 #pragma once
 
-#include "ImagesItemModel.hpp"
+#include "ImageItemModel.hpp"
 
-class ImagesItemDelegate : public QStyledItemDelegate {
+class ImageItemDelegate : public QStyledItemDelegate {
 	Q_OBJECT
 public:
-	explicit ImagesItemDelegate(QObject *parent = nullptr);
-	virtual ~ImagesItemDelegate();
+	explicit ImageItemDelegate(QObject *parent = nullptr);
+	virtual ~ImageItemDelegate();
 	void set_padding(unsigned padding);
 	unsigned get_padding() const;
 signals:
+	void editor_created(QWidget *widget) const;
 	void index_edited(const QModelIndex &index) const;
 protected:
 	virtual void paint(QPainter *painter, const QStyleOptionViewItem &option,

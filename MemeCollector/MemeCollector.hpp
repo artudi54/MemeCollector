@@ -4,10 +4,11 @@
 #include "ui_memecollector.h"
 #include <QHotkey>
 
-#include "usermessage.hpp"
-
 #include "ImageMIME.hpp"
 #include "Filenotifier.hpp"
+
+#include "cache/CacheMapManager.hpp"
+
 #include "ImageViewer.hpp"
 #include "ItemDialog.hpp"
 #include "ProgramConfigDialog.hpp"
@@ -38,7 +39,9 @@ protected:
 
 	void table_open_image_viewer();
 	void table_open_directory();
+#ifdef Q_OS_WIN
 	void table_properties();
+#endif
 	void table_add_new();
 	void table_edit();
 	void table_remove();
@@ -88,14 +91,19 @@ private:
 	void read_database_item(QXmlStreamReader &reader, unsigned rowNumber);
 	void save_database();
 	void register_shortcuts();
-	void remove_from_autostart();
+
 	void add_to_autostart();
+	void remove_from_autostart();
+	
 	void initial_window_show();
 
 	void apply_settings();
 
+	void validate_cache();
+
 	QString imageSavePath;
 	QHotkey showHotkey, quicksaveUrlHotkey, quicksaveClipboardHotkey;
+	CacheMapManager cacheMapManager;
 
 	ItemDialog *itemDialog;
 	QNetworkAccessManager *downloader;
@@ -105,9 +113,10 @@ private:
 	QSystemTrayIcon *trayIcon;
 	QuickUrlWindow *quickUrl;
 	QuickClipboardWindow *quickClipboard;
-	ImageViewer *imageView;
+	ImageViewer imageViewer;
 
 	static const QString CONFIG_FILE;
+	static const QString DATABASE_FILE;
 };
 
 #endif // MEMECOLLECTOR_H

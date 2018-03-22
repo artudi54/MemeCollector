@@ -1,5 +1,6 @@
 #include "stdafx.h"
-#include "memecollector.h"
+#include "MemeCollector.hpp"
+#include "autostart.hpp"
 
 MemeCollector::MemeCollector(QWidget *parent)
 	: QMainWindow(parent)
@@ -7,6 +8,7 @@ MemeCollector::MemeCollector(QWidget *parent)
 	, showHotkey(QKeySequence(Qt::ControlModifier | Qt::ShiftModifier | Qt::Key_1), false, this)
 	, quicksaveUrlHotkey(QKeySequence(Qt::ControlModifier | Qt::ShiftModifier | Qt::Key_2), false, this)
 	, quicksaveClipboardHotkey(QKeySequence(Qt::ControlModifier | Qt::ShiftModifier | Qt::Key_3), false, this)
+	, cacheMapManager(QDir(QStringLiteral("ImageCache")))
 	, itemDialog(nullptr)
 	, downloader(new QNetworkAccessManager(this))
 	, fileNotifier(new FileNotifier(this))
@@ -15,7 +17,7 @@ MemeCollector::MemeCollector(QWidget *parent)
 	, trayIcon(new QSystemTrayIcon(this))
 	, quickUrl(nullptr)
 	, quickClipboard(nullptr)
-	, imageView(new ImageViewer(this)) {
+	, imageViewer(this) {
 	this->setupUi(this);
 
 	this->connect_signals();
@@ -27,6 +29,8 @@ MemeCollector::MemeCollector(QWidget *parent)
 	this->apply_settings();
 
 	this->initial_window_show();
+	this->validate_cache();
+	imageViewer.set_cache_map_manager(cacheMapManager);
 
 	radioURL->click();
 }
@@ -222,11 +226,13 @@ void MemeCollector::options() {
 
 
 void MemeCollector::table_open_image_viewer() {
+	QString name = tableWidget->item(
+		tableWidget->selectedRanges().first().topRow(), 0)->text();
 	QString path = tableWidget->item(
-		tableWidget->selectedRanges().first().topRow(), 1
-	)->text();
-	imageView->set_directory(path);
-	imageView->show();
+		tableWidget->selectedRanges().first().topRow(), 1)->text();
+
+	imageViewer.set_directory(name, path);
+	imageViewer.show();
 }
 
 
@@ -234,10 +240,13 @@ void MemeCollector::table_open_directory() {
 	unsigned currentRow = tableWidget->selectedRanges().first().topRow();
 	QString text = tableWidget->item(currentRow, 1)->text();
 	if (!QDesktopServices::openUrl(QUrl::fromLocalFile(text)))
-		critical_error(this, "Could not open directory");
+		QMessageBox::critical(
+			this, QStringLiteral("Critical Error"),
+			QStringLiteral("Could not open directory")
+		);
 }
 
-
+#ifdef Q_OS_WIN
 void MemeCollector::table_properties() {
 	unsigned currentRow = tableWidget->selectedRanges().first().topRow();
 	std::wstring path = tableWidget->item(currentRow, 1)->text().toStdWString();
@@ -249,6 +258,7 @@ void MemeCollector::table_properties() {
 	info.lpVerb = L"properties";
 	::ShellExecuteExW(&info);
 }
+#endif
 
 
 void MemeCollector::table_add_new() {
@@ -265,6 +275,12 @@ void MemeCollector::table_add_new() {
 		itemDialog, &QObject::destroyed, this,
 		[&]() { itemDialog = nullptr; }
 	);
+	QObject::connect(
+		itemDialog, &ItemDialog::path_changed, this,
+		[&](QString prevName, QString newName, QString newPath) {
+			cacheMapManager.add(newName);
+		});
+
 	QObject::connect(
 		itemDialog, &QDialog::accepted,
 		[&]() { this->save_database(); }
@@ -294,6 +310,17 @@ void MemeCollector::table_edit() {
 		[&]() { itemDialog = nullptr; }
 	);
 	QObject::connect(
+		itemDialog, &ItemDialog::path_changed, this,
+		[&](QString prevName, QString newName, QString newPath) {
+			cacheMapManager.remove(prevName);
+			cacheMapManager.add(newName);
+	});
+	QObject::connect(
+		itemDialog, &ItemDialog::name_changed, this,
+		[&](QString prevName, QString newName) {
+			cacheMapManager.rename(prevName, newName);
+	});
+	QObject::connect(
 		itemDialog, &QDialog::accepted,
 		[&]() { this->save_database();  }
 	);
@@ -304,12 +331,15 @@ void MemeCollector::table_edit() {
 
 void MemeCollector::table_remove() {
 	QTableWidgetSelectionRange range = tableWidget->selectedRanges().first();
+	QString name = tableWidget->item(range.topRow(), range.leftColumn())->text();
+	cacheMapManager.remove(name);
 	tableWidget->removeRow(range.topRow());
 	this->save_database();
 }
 
 
 void MemeCollector::table_remove_all() {
+	cacheMapManager.clear();
 	tableWidget->setRowCount(0);
 	this->save_database();
 }
@@ -322,7 +352,7 @@ void MemeCollector::table_remove_all() {
 
 
 void MemeCollector::read_me() {
-	QDesktopServices::openUrl(QUrl("ReadMe.txt"));
+	QDesktopServices::openUrl(QUrl(QStringLiteral("ReadMe.txt")));
 }
 
 
@@ -366,7 +396,8 @@ void MemeCollector::on_pc_dir() {
 
 void MemeCollector::select_image() {
 	QString path = QFileDialog::getOpenFileName(
-		this, "Select Image", QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
+		this, QStringLiteral("Select Image"),
+		QStandardPaths::writableLocation(QStandardPaths::PicturesLocation),
 		"Standard images (" + ImageMIME::regexp_suffix_list() + ")"
 	);
 	if (!path.isEmpty())
@@ -383,7 +414,10 @@ void MemeCollector::select_image() {
 
 void MemeCollector::collect() {
 	if (tableWidget->selectedItems().isEmpty()) {
-		input_error(this, "No meme folder selected (if list is empty add some directories)");
+		QMessageBox::information(
+			this, QStringLiteral("Input Error"),
+			QStringLiteral("No meme folder selected (if list is empty add some directories)")
+		);
 		return;
 	}
 
@@ -424,12 +458,15 @@ void MemeCollector::on_selection_changed() {
 
 void MemeCollector::collecting_url_finished(QNetworkReply * reply) {
 	if (reply->error())
-		critical_error(this, reply->errorString());
+		QMessageBox::critical(this, QStringLiteral("Critical Error"), reply->errorString());
 	else {
 		QByteArray data = reply->readAll();
 		QFile filePath(imageSavePath);
 		if (!filePath.open(QFile::WriteOnly) || filePath.write(data) != data.size())
-			critical_error(this, "Saving data to hard drive failed");
+			QMessageBox::critical(
+				this, QStringLiteral("Critical Error"),
+				QStringLiteral("Saving data to hard drive failed")
+			);
 		else if (programConfig.showMsgOnComplete)
 			this->collecting_complete_message();
 	}
@@ -440,7 +477,7 @@ void MemeCollector::collecting_url_finished(QNetworkReply * reply) {
 
 void MemeCollector::collecting_pc_directory_finished(bool success) {
 	if (!success)
-		critical_error(this, fileNotifier->error_string());
+		QMessageBox::critical(this, QStringLiteral("Critical Error"), fileNotifier->error_string());
 	else if (programConfig.showMsgOnComplete)
 		this->collecting_complete_message();
 	progressBar->setValue(0);
@@ -613,6 +650,11 @@ std::pair<QString, QString> MemeCollector::file_name_and_validate_local(QString 
 }
 
 
+
+
+
+
+
 QString MemeCollector::save_path_and_overwrite_check(QString & fileName, QString & suffix) {
 	QString optionalName = nameInputEdit->text();
 	if (changeNameCheckBox->isChecked() && !optionalName.isEmpty())
@@ -623,13 +665,13 @@ QString MemeCollector::save_path_and_overwrite_check(QString & fileName, QString
 	QString path = QDir(thumbnailsDirectory).filePath(fileName + "." + suffix);
 	if (programConfig.askBeforeOverwriting && QFileInfo(path).exists()) {
 		int button = QMessageBox::question(
-			this, "File Overwrite",
-			"The file already exists, do you want to overwrite it?",
+			this, QStringLiteral("File Overwrite"),
+			QStringLiteral("The file already exists, do you want to overwrite it?"),
 			QMessageBox::Yes | QMessageBox::No
 		);
 		if (button == QMessageBox::Yes)
 			return path;
-		return "";
+		return QString();
 	}
 	return path;
 }
@@ -657,7 +699,7 @@ void MemeCollector::collect_url() {
 	try {
 		fileSuffixPair = this->file_name_and_validate_url(url, urlStr);
 	} catch (const char *error) {
-		input_error(this, error);
+		QMessageBox::information(this, QStringLiteral("Input Error"), error);
 		return;
 	}
 
@@ -674,7 +716,10 @@ void MemeCollector::collect_url() {
 void MemeCollector::collect_clipboard() {
 	QString fileName = nameInputEdit->text();
 	if (fileName.isEmpty()) {
-		input_error(this, "File name input field is empty");
+		QMessageBox::information(
+			this, QStringLiteral("Input Error"),
+			QStringLiteral("File name input field is empty")
+		);
 		return;
 	}
 
@@ -682,7 +727,10 @@ void MemeCollector::collect_clipboard() {
 	QImage image = clipboard->image();
 
 	if (image.isNull()) {
-		critical_error(this, "Clipboard does not contain valid image");
+		QMessageBox::critical(
+			this, QStringLiteral("Critical Error"),
+			QStringLiteral("Clipboard does not contain valid image")
+		);
 		return;
 	}
 
@@ -692,7 +740,10 @@ void MemeCollector::collect_clipboard() {
 		return;
 
 	if (!image.save(imageSavePath, suffix.toStdString().c_str(), 100))
-		critical_error(this, "Saving data to hard drive failed (check if file name is valid)");
+		QMessageBox::critical(
+			this, QStringLiteral("Critical Error"),
+			QStringLiteral("Saving data to hard drive failed (check if file name is valid)")
+		);
 	else if (programConfig.showMsgOnComplete)
 		this->collecting_complete_message();
 }
@@ -714,11 +765,11 @@ void MemeCollector::collect_pc_directory() {
 
 void MemeCollector::collecting_complete_message() {
 	QMessageBox msg(this);
-	QCheckBox checkBox("Don't show this again");
+	QCheckBox checkBox(QStringLiteral("Don't show this again"));
 
 	msg.setWindowTitle("Operation Successful");
 	msg.setIcon(QMessageBox::Information);
-	msg.setText("Saving data to hard drive successfully completed");
+	msg.setText(QStringLiteral("Saving data to hard drive successfully completed"));
 	msg.setCheckBox(&checkBox);
 	msg.exec();
 
@@ -758,7 +809,7 @@ void MemeCollector::table_select_row(unsigned rowNumber) {
 
 
 void MemeCollector::read_database() {
-	QFile file("MemeDatabase.xml");
+	QFile file(DATABASE_FILE);
 	if (!file.open(QFile::ReadOnly))
 		return;
 
@@ -794,7 +845,10 @@ void MemeCollector::read_database() {
 
 
 	catch (const char *errorText) {
-		critical_error(this, QString("Database reading error - ") + errorText);
+		QMessageBox::critical(
+			this, QStringLiteral("Critical Error"),
+			QString("Database reading error - ") + errorText
+		);
 		this->save_database();
 	}
 }
@@ -831,9 +885,12 @@ void MemeCollector::read_database_item(QXmlStreamReader &reader, unsigned rowNum
 }
 
 void MemeCollector::save_database() {
-	QFile file("MemeDatabase.xml");
+	QFile file(DATABASE_FILE);
 	if (!file.open(QFile::WriteOnly)) {
-		critical_error(this, "Could not save list database");
+		QMessageBox::critical(
+			this, QStringLiteral("Critical Error"),
+			QStringLiteral("Could not save list database")
+		);
 		return;
 	}
 
@@ -888,30 +945,14 @@ void MemeCollector::register_shortcuts() {
 
 
 
+void MemeCollector::add_to_autostart() {
+	autostart::add_to_autostart(this->windowTitle(), QApplication::applicationFilePath());
+}
 
 void MemeCollector::remove_from_autostart() {
-#ifdef Q_OS_WIN
-	QSettings registry(
-		QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
-		QSettings::NativeFormat
-	);
-	registry.remove(this->windowTitle());
-#endif
+	autostart::remove_from_autostart(this->windowTitle());
 }
 
-
-
-void MemeCollector::add_to_autostart() {
-#ifdef Q_OS_WIN
-	QSettings registry(
-		QStringLiteral("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run"),
-		QSettings::NativeFormat
-		);
-	QString value = "\"" + QApplication::applicationFilePath() + "\" --autostart";
-	value.replace('/', '\\');
-	registry.setValue(this->windowTitle(), value);
-#endif
-}
 
 
 
@@ -919,7 +960,7 @@ void MemeCollector::add_to_autostart() {
 
 void MemeCollector::initial_window_show() {
 	QStringList arguments = QCoreApplication::arguments();
-	if (arguments.size() == 2 && arguments[1] == "--autostart") {
+	if (arguments.size() == 2 && arguments[1] == QStringLiteral("--autostart")) {
 		if (programConfig.startHidden || programConfig.autostartMode == ProgramConfig::AutostartMode::OnHidden)
 			this->hide();
 		else
@@ -938,9 +979,18 @@ void MemeCollector::apply_settings() {
 		this->add_to_autostart();
 }
 
+void MemeCollector::validate_cache() {
+	std::vector<QString> vec(tableWidget->rowCount());
+	for (std::size_t i = 0; i < vec.size(); ++i)
+		vec[i] = tableWidget->item(i, 0)->text();
+	std::sort(vec.begin(), vec.end());
+	cacheMapManager.validate(vec.begin(), vec.end());
+}
+
 
 
 
 
 
 const QString MemeCollector::CONFIG_FILE = QStringLiteral("config.ini");
+const QString MemeCollector::DATABASE_FILE = QStringLiteral("MemeDatabase.xml");

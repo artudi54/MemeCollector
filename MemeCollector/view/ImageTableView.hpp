@@ -1,18 +1,18 @@
 #pragma once
 
-#include "ImagesLoader.hpp"
-#include "ImagesItemModel.hpp"
-#include "ImagesItemDelegate.hpp"
-#include "ImageCacheMap.hpp"
+#include "ImageLoader.hpp"
+#include "ImageItemModel.hpp"
+#include "ImageItemDelegate.hpp"
+#include "cache/ImageCacheMap.hpp"
 
-class ImagesTableView : public QTableView {
+class ImageTableView : public QTableView {
 	Q_OBJECT
 public:
-	explicit ImagesTableView(QWidget *parent = nullptr);
-	ImagesTableView(const QDir &directory, QWidget *parent = nullptr);
-	~ImagesTableView();
+	explicit ImageTableView(QWidget *parent = nullptr);
+	ImageTableView(const SharedImageCacheMap & imageCahceMap, const QDir &directory, QWidget *parent = nullptr);
+	~ImageTableView();
 
-	void set_directory(const QDir &directory);
+	void set_directory(const SharedImageCacheMap & imageCacheMap, const QDir &directory);
 	const QDir& get_directory() const;
 
 	void clear();
@@ -52,8 +52,9 @@ private slots:
 	void action_properties();
 #endif
 
-	void open_file(const QModelIndex &index);
+	void open_file(const QModelIndex &index) const;
 private:
+	void fill_page(QPrinter *printer, QPainter *painter, const SharedImageItemWidget &widget) const;
 	void make_menu();
 	void connect_signals();
 	void stop_thread();
@@ -61,12 +62,12 @@ private:
 	QString searchText;
 	std::chrono::steady_clock::time_point prevTime, curTime;
 
-	ImageCacheMap cacheMap;
+	SharedImageCacheMap imageCacheMap;
 
-	QThread *loaderThread; //make on stack
-	ImagesLoader *imagesLoader;
-	ImagesItemModel *imagesModel;
-	ImagesItemDelegate *imagesDelegate;
+	QThread loaderThread; //todo: make on stack
+	ImageLoader *imagesLoader;
+	ImageItemModel *imagesModel;
+	ImageItemDelegate *imagesDelegate;
 	QMenu *editMenu;
 	QAction *actionOpen;
 	QAction *actionRename;

@@ -35,8 +35,8 @@ ItemDialog::~ItemDialog() {}
 
 
 void ItemDialog::accept_input() {
-	QString nameStr = nameInput->text();
-	QString pathStr = pathInput->text();
+	QString nameStr = nameInput->text().trimmed();
+	QString pathStr = pathInput->text().trimmed();
 	while (pathStr.endsWith('/') || pathStr.endsWith('\\'))
 		pathStr.chop(1);
 
@@ -56,6 +56,10 @@ void ItemDialog::accept_input() {
 		return;
 	}
 
+	if (pathStr != path->text())
+		emit path_changed(name->text(), nameStr, pathStr);
+	else if (nameStr != name->text())
+		emit name_changed(name->text(), nameStr);
 
 	name->setText(nameStr);
 	path->setText(pathStr);

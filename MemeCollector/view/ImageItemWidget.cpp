@@ -1,20 +1,20 @@
 #include "stdafx.h"
-#include "ImagesItemWidget.hpp"
+#include "ImageItemWidget.hpp"
 
 
 
-ImagesItemStackedWidget::ImagesItemStackedWidget(QWidget * parent)
+ImageItemStackedWidget::ImageItemStackedWidget(QWidget * parent)
 	: QStackedWidget(parent) {}
 
-ImagesItemStackedWidget::~ImagesItemStackedWidget() {}
+ImageItemStackedWidget::~ImageItemStackedWidget() {}
 
-QSize ImagesItemStackedWidget::minimumSizeHint() const {
+QSize ImageItemStackedWidget::minimumSizeHint() const {
 	if (this->currentIndex() != -1)
 		return this->currentWidget()->minimumSizeHint();
 	return QSize();
 }
 
-QSize ImagesItemStackedWidget::sizeHint() const {
+QSize ImageItemStackedWidget::sizeHint() const {
 	if (this->currentIndex() != -1)
 		return this->currentWidget()->sizeHint();
 	return QSize();
@@ -25,12 +25,12 @@ QSize ImagesItemStackedWidget::sizeHint() const {
 
 
 
-ImagesItemWidgetEdit::ImagesItemWidgetEdit(QWidget * parent)
+ImageItemWidgetEdit::ImageItemWidgetEdit(QWidget * parent)
 	: QLineEdit(parent) {}
 
-ImagesItemWidgetEdit::~ImagesItemWidgetEdit() {}
+ImageItemWidgetEdit::~ImageItemWidgetEdit() {}
 
-void ImagesItemWidgetEdit::focusInEvent(QFocusEvent * event) {
+void ImageItemWidgetEdit::focusInEvent(QFocusEvent * event) {
 	QString text = this->text();
 	int pos = text.lastIndexOf(QChar('.'));
 	if (pos != -1)
@@ -45,7 +45,7 @@ void ImagesItemWidgetEdit::focusInEvent(QFocusEvent * event) {
 
 
 
-ImagesItemWidget::ImagesItemWidget(QWidget *parent)
+ImageItemWidget::ImageItemWidget(QWidget *parent)
 	: QWidget(parent)
 	, layout(this)
 	, stackedEditor(this)
@@ -70,19 +70,19 @@ ImagesItemWidget::ImagesItemWidget(QWidget *parent)
 	layout.addWidget(&labelPixmap, Qt::AlignCenter);
 	layout.addWidget(&stackedEditor);
 	this->setFocusProxy(&editTitle);
-	QObject::connect(&editTitle, &ImagesItemWidgetEdit::editingFinished, this, &ImagesItemWidget::editing_finished);
+	QObject::connect(&editTitle, &ImageItemWidgetEdit::editingFinished, this, &ImageItemWidget::editing_finished);
 }
 
-ImagesItemWidget::ImagesItemWidget(const QFileInfo &pathInfo, const QPixmap &pixmap, QWidget * parent)
-	: ImagesItemWidget(parent) {
+ImageItemWidget::ImageItemWidget(const QFileInfo &pathInfo, const QPixmap &pixmap, QWidget * parent)
+	: ImageItemWidget(parent) {
 	this->set_info(pathInfo);
 	labelPixmap.setPixmap(pixmap);
 }
 
 
-ImagesItemWidget::~ImagesItemWidget(){}
+ImageItemWidget::~ImageItemWidget(){}
 
-void ImagesItemWidget::set_info(QFileInfo _pathInfo) {
+void ImageItemWidget::set_info(QFileInfo _pathInfo) {
 	pathInfo = std::move(_pathInfo);
 	QString title = pathInfo.fileName();
 	labelTitle.setText(title);
@@ -92,23 +92,23 @@ void ImagesItemWidget::set_info(QFileInfo _pathInfo) {
 	labelTitle.setText(metrics.elidedText(title, Qt::ElideRight, labelTitle.width()));
 }
 
-const QFileInfo& ImagesItemWidget::get_info() const {
+const QFileInfo& ImageItemWidget::get_info() const {
 	return pathInfo;
 }
 
-QString ImagesItemWidget::get_title() const {
+QString ImageItemWidget::get_title() const {
 	return pathInfo.fileName();
 }
 
-void ImagesItemWidget::set_pixmap(const QPixmap & pixmap) {
+void ImageItemWidget::set_pixmap(const QPixmap & pixmap) {
 	labelPixmap.setPixmap(pixmap);
 }
 
-const QPixmap* ImagesItemWidget::get_pixmap() const {
+const QPixmap* ImageItemWidget::get_pixmap() const {
 	return labelPixmap.pixmap();
 }
 
-bool ImagesItemWidget::verify_and_update() {
+bool ImageItemWidget::verify_and_update() {
 	QString fileName = editTitle.text().trimmed();
 	if (fileName.isEmpty() || fileName == pathInfo.fileName())
 		return false;
@@ -135,7 +135,7 @@ bool ImagesItemWidget::verify_and_update() {
 }
 
 
-void ImagesItemWidget::start_editing() {
+void ImageItemWidget::start_editing() {
 	stackedEditor.setCurrentIndex(1);
 
 }
