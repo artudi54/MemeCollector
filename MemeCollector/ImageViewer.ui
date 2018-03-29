@@ -39,16 +39,16 @@
     <number>0</number>
    </property>
    <item row="0" column="0">
-    <widget class="ImagesTableView" name="imageView"/>
+    <widget class="ImageTableView" name="imageView"/>
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>ImagesTableView</class>
+   <class>ImageTableView</class>
    <extends>QTableView</extends>
-   <header>view/ImagesTableView.hpp</header>
+   <header>view/ImageTableView.hpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

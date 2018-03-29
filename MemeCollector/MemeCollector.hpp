@@ -1,11 +1,11 @@
 #ifndef MEMECOLLECTOR_H
 #define MEMECOLLECTOR_H
 
-#include "ui_memecollector.h"
+#include "ui_MemeCollector.h"
 #include <QHotkey>
 
 #include "ImageMIME.hpp"
-#include "Filenotifier.hpp"
+#include "FileNotifier.hpp"
 
 #include "cache/CacheMapManager.hpp"
 
@@ -17,106 +17,101 @@
 
 
 class MemeCollector : public QMainWindow, private Ui::MemeCollectorClass {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	friend class QuickUrlWindow;
-	friend class QuickClipboardWindow;
+    friend class QuickUrlWindow;
+    friend class QuickClipboardWindow;
 
-	explicit MemeCollector(QWidget *parent = 0);
-	virtual ~MemeCollector();
+    explicit MemeCollector(QWidget *parent = 0);
+    virtual ~MemeCollector();
 protected:
-	virtual void changeEvent(QEvent *event) override;
-	virtual void showEvent(QShowEvent *event) override;
-	virtual void hideEvent(QHideEvent *event) override;
+    virtual void changeEvent(QEvent *event) override;
+    virtual void showEvent(QShowEvent *event) override;
+    virtual void hideEvent(QHideEvent *event) override;
 
-	private slots:
-	void quick_url();
-	void quick_clipboard();
+private slots:
+    void quick_url();
+    void quick_clipboard();
 
-	void paste_to_input();
+    void paste_to_input();
 
-	void options();
+    void options();
 
-	void table_open_image_viewer();
-	void table_open_directory();
+    void table_open_image_viewer();
+    void table_open_directory();
 #ifdef Q_OS_WIN
-	void table_properties();
+    void table_properties();
 #endif
-	void table_add_new();
-	void table_edit();
-	void table_remove();
-	void table_remove_all();
+    void table_add_new();
+    void table_edit();
+    void table_remove();
+    void table_remove_all();
 
-	void read_me();
+    void read_me();
 
-	void on_URL();
-	void on_clipboard();
-	void on_pc_dir();
+    void switch_to_URL();
+    void switch_to_clipboard();
+    void switch_to_pc_dir();
 
-	void select_image();
+    void select_image();
 
-	void collect();
-
-
-	void on_selection_changed();
+    void collect();
 
 
-	void collecting_url_finished(QNetworkReply *reply);
-	void collecting_pc_directory_finished(bool success);
+    void handle_selection_changed();
 
-	void update_progress(uint64_t current, uint64_t total);
+
+    void collecting_url_finished(QNetworkReply *reply);
+    void collecting_pc_directory_finished(bool success);
+
+    void update_progress(uint64_t current, uint64_t total);
 
 private:
-	enum class HotKey {
-		Show = 100,
-		QuickUrl,
-		QuickImage
-	};
 
-	void connect_signals();
-	void connect_menus();
+    void connect_signals();
+    void connect_menus();
 
-	std::pair<QString, QString> file_name_and_validate_url(QUrl &url, QString &urlStr);
-	std::pair<QString, QString> file_name_and_validate_local(QString &localPath);
-	QString save_path_and_overwrite_check(QString &fileName, QString &suffix);
+    std::pair<QString, QString> file_name_and_validate_url(QUrl &url, QString &urlStr);
+    std::pair<QString, QString> file_name_and_validate_local(QString &localPath);
+    QString save_path_and_overwrite_check(QString &fileName, QString &suffix);
 
-	void collect_url();
-	void collect_clipboard();
-	void collect_pc_directory();
+    void collect_url();
+    void collect_clipboard();
+    void collect_pc_directory();
 
-	void collecting_complete_message();
+    void collecting_complete_message();
 
-	void table_select_row(unsigned rowNumber);
-	void read_database();
-	void read_database_item(QXmlStreamReader &reader, unsigned rowNumber);
-	void save_database();
-	void register_shortcuts();
+    void table_select_row(unsigned rowNumber);
+    void read_database();
+    void read_database_item(QXmlStreamReader &reader, unsigned rowNumber);
+    void save_database();
+    void register_shortcuts();
 
-	void add_to_autostart();
-	void remove_from_autostart();
-	
-	void initial_window_show();
+    void add_to_autostart();
+    void remove_from_autostart();
 
-	void apply_settings();
+    void initial_window_show();
 
-	void validate_cache();
+    void apply_settings();
 
-	QString imageSavePath;
-	QHotkey showHotkey, quicksaveUrlHotkey, quicksaveClipboardHotkey;
-	CacheMapManager cacheMapManager;
+    void validate_cache();
 
-	ItemDialog *itemDialog;
-	QNetworkAccessManager *downloader;
-	FileNotifier *fileNotifier;
-	ProgramConfig programConfig;
-	ProgramConfigDialog *configDialog;
-	QSystemTrayIcon *trayIcon;
-	QuickUrlWindow *quickUrl;
-	QuickClipboardWindow *quickClipboard;
-	ImageViewer imageViewer;
+    QString imageSavePath;
+    QHotkey showHotkey, quicksaveUrlHotkey, quicksaveClipboardHotkey;
+    CacheMapManager cacheMapManager;
 
-	static const QString CONFIG_FILE;
-	static const QString DATABASE_FILE;
+    ItemDialog *itemDialog;
+    QNetworkAccessManager *downloader;
+    FileNotifier *fileNotifier;
+    ProgramConfig programConfig;
+    ProgramConfigDialog *configDialog;
+    QSystemTrayIcon *trayIcon;
+    QuickUrlWindow *quickUrl;
+    QuickClipboardWindow *quickClipboard;
+    ImageViewer imageViewer;
+
+    static const QString CONFIG_FILE;
+    static const QString DATABASE_FILE;
 };
 
 #endif // MEMECOLLECTOR_H

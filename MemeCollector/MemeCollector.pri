@@ -15,7 +15,7 @@ HEADERS += ./cache/ImageCacheMap.hpp \
     ./ImageMIME.hpp \
     ./resource.h \
     ./ImageViewer.hpp \
-    ./Filenotifier.hpp \
+    ./FileNotifier.hpp \
     ./MemeCollectorApplication.hpp \
     ./QuickUrlWindow.hpp \
     ./QuickClipboardWindow.hpp \
@@ -33,7 +33,7 @@ HEADERS += ./cache/ImageCacheMap.hpp \
 SOURCES += ./cache/CacheMapManager.cpp \
     ./cache/CachedImage.cpp \
     ./DeselectableTableWidget.cpp \
-    ./Filenotifier.cpp \
+    ./FileNotifier.cpp \
     ./ImageMIME.cpp \
     ./ImageViewer.cpp \
     ./ItemDialog.cpp \
@@ -47,7 +47,6 @@ SOURCES += ./cache/CacheMapManager.cpp \
     ./view/ImageItemModel.cpp \
     ./view/ImageItemDelegate.cpp \
     ./QHotkey/qhotkey.cpp \
-    ./QHotkey/qhotkey_win.cpp \
     ./cache/ImageCacheMap.cpp \
     ./view/ImageTableView.cpp \
     ./view/ImageLoader.cpp \
@@ -60,3 +59,6 @@ FORMS += ./ImageViewer.ui \
     ./ItemDialog.ui \
     ./MemeCollector.ui
 RESOURCES += memecollector.qrc
+
+win32:SOURCES += ./QHotkey/qhotkey_win.cpp
+unix:SOURCES += ./QHotkey/qhotkey_x11.cpp

@@ -2,26 +2,6 @@
 <ui version="4.0">
  <class>MemeCollectorClass</class>
  <widget class="QMainWindow" name="MemeCollectorClass">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>600</width>
-    <height>510</height>
-   </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>600</width>
-    <height>510</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>600</width>
-    <height>510</height>
-   </size>
-  </property>
   <property name="focusPolicy">
    <enum>Qt::TabFocus</enum>
   </property>
@@ -397,8 +377,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>600</width>
-     <height>21</height>
+     <width>635</width>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -529,7 +509,7 @@
   <customwidget>
    <class>DeselectableTableWidget</class>
    <extends>QTableWidget</extends>
-   <header>deselectabletablewidget.hpp</header>
+   <header>DeselectableTableWidget.hpp</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -541,8 +521,6 @@
   <tabstop>removeButton</tabstop>
   <tabstop>removeAllButton</tabstop>
  </tabstops>
- <resources>
-  <include location="memecollector.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

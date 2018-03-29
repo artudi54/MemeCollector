@@ -6,16 +6,27 @@ TEMPLATE = app
 TARGET = MemeCollector
 DESTDIR = ../x64/Release
 QT += core xml network gui widgets printsupport
-CONFIG += release
+unix:QT += x11extras
+CONFIG += c++17 precompile_header
+CONFIG += warn_off
+QMAKE_CFLAGS_WARN_ON -= -Wall
+QMAKE_CXXFLAGS_WARN_ON -= -Wall
+Debug:CONFIG += debug console
+Release:CCFLAG += release
+QMAKE_CXXFLAGS += -std=c++17
 DEFINES += QT_NETWORK_LIB QT_WIDGETS_LIB QT_XML_LIB QT_PRINTSUPPORT_LIB
+unix:DEFINES += QT_X11_EXTRAS_LIB
 INCLUDEPATH += ./QHotkey \
     ./GeneratedFiles \
     . \
     ./GeneratedFiles/$(ConfigurationName)
 DEPENDPATH += .
-MOC_DIR += ./GeneratedFiles/$(ConfigurationName)
-OBJECTS_DIR += release
+MOC_DIR += ./GeneratedFiles/
+Release:OBJECTS_DIR += release
+Debug:OBJECTS_DIR += debug
 UI_DIR += ./GeneratedFiles
 RCC_DIR += ./GeneratedFiles
 include(MemeCollector.pri)
 win32:RC_FILE = MemeCollector.rc
+PRECOMPILED_HEADER = stdafx.h
+unix:LIBS += -L/usr/X11/lib -lX11
