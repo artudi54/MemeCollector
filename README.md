@@ -1,5 +1,5 @@
 # MemeCollector
-MemeCollector is a multi-platform application automatising collecting images from the internet. It let's you categorize them and preview them in simple image viewer.
+MemeCollector is a multi-platform application automatising collecting images from the internet. It lets you categorize them and preview them in simple image viewer.
 ![alt text](WindowsReadmeImage.png "Preview Windows")
 ![alt text](LinuxReadmeImage.png "Preview Linux")
 
