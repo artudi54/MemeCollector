@@ -11,6 +11,13 @@ int main(int argc, char *argv[]) {
     MemeCollectorApplication::setQuitOnLastWindowClosed(false);
     application.set_working_directory();
     MemeCollector *collector = new MemeCollector;
+    collector->setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            collector->size(),
+            qApp->desktop()->availableGeometry()
+        ));
     collector->setAttribute(Qt::WA_DeleteOnClose);
     return application.exec();
 }
